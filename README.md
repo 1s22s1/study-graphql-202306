@@ -1,3 +1,3 @@
-# 初めてのGraphQL
+# GraphQLの調査
 
-初めてのGraphQLを参考に練習をします。
+GraphQLの調査をします。
