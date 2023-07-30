@@ -17,6 +17,7 @@ const resolvers = {
         totalPhots: () => photos.length
     },
 
+    // argsにはnameとdescriptionが含まれる。
     Mutation: {
         postPhoto(parent, args) {
             photos.push(args)
