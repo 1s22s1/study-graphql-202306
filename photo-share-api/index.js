@@ -4,12 +4,26 @@ const typeDefs = `
     type Query {
         totalPhots: Int!
     }
+
+    type Mutation {
+        postPhoto(name: String! description: String): Boolean!
+    }
 `
+
+var photos = []
 
 const resolvers = {
     Query: {
-        totalPhots: () => 42
+        totalPhots: () => photos.length
+    },
+
+    Mutation: {
+        postPhoto(parent, args) {
+            photos.push(args)
+            return true
+        }
     }
+
 }
 
 const server = new ApolloServer({
