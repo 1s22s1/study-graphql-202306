@@ -14,6 +14,7 @@ const typeDefs = `
         name: String
         avatar: String
         postedPhotos: [Photo!]!
+        inPhotos: [Photo!]!
     }
 
     type Photo {
@@ -23,6 +24,7 @@ const typeDefs = `
         description: String
         category: PhotoCategory!
         postedBy: User!
+        taggedUsers: [User!]!
     }
 
     input PostPhotoInput {
@@ -42,6 +44,12 @@ const typeDefs = `
 `
 
 var _id = 0
+var tags = [
+    {"photoID": "1", "userId": "githubUser1"},
+    {"photoID": "2", "userId": "githubUser1"},
+    {"photoID": "2", "userId": "githubUser2"},
+    {"photoID": "2", "userId": "githubUser3"},
+]
 var users = [
     {"githubLogin": "githubUser1", "name": "name1"},
     {"githubLogin": "githubUser2", "name": "name2"},
@@ -49,21 +57,21 @@ var users = [
 ]
 var photos = [
     {
-        "id": 1,
+        "id": "1",
         "name": "name1",
         "description": "description1",
         "category": "ACTION",
         "githubUser": "githubUser1"
     },
     {
-        "id": 2,
+        "id": "2",
         "name": "name2",
         "description": "description2",
         "category": "ACTION",
         "githubUser": "githubUser2"
     },
     {
-        "id": 3,
+        "id": "3",
         "name": "name3",
         "description": "description3",
         "category": "ACTION",
@@ -91,12 +99,20 @@ const resolvers = {
         url: parent => `http://yoursite.com/img/${parent.id}.jpg`,
         postedBy: parent => {
             return users.find(u => u.githubLogin === parent.githubUser)
-        }
+        },
+        taggedUsers: parent => tags
+            .filter(tag => tag.photoID === parent.id)
+            .map(tag => tag.userId)
+            .map(userID => users.find(u => u.githubLogin === userID))
     },
     User: {
         postedPhotos: parent => {
             return photos.filter(p => p.githubUser === parent.githubLogin)
-        }
+        },
+        inPhotos: parent => tags
+            .filter(tag => tag.userID === parent.id)
+            .map(tag => tag.photoID)
+            .map(photoID => photos.find(p => p.id === photoID))
     }
 }
 
