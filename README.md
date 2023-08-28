@@ -1,3 +1,3 @@
-# GraphQLの調査
+# Studying GraphQL
 
-GraphQLの調査をします。
+This is repository for studying GraphQL.
